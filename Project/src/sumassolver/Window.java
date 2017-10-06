@@ -20,7 +20,17 @@ public class Window extends JFrame implements ActionListener {
     
     JTextField[][] fields;
     JButton resetBtn;
+	JButton stepBtn;
+	JButton sendBtn;
     JButton solveBtn;
+	
+	static int[][] TEST_VALUES = {
+		{00,12,11,00,26},
+		{13,00,00,14,40},
+		{00,15,00,10,35},
+		{04,00,16,00,35},
+		{25,41,38,32,00},
+	};
 
     public Color createColor(javafx.scene.paint.Color inColor) {
         float hue = (float) inColor.getHue();
@@ -62,17 +72,42 @@ public class Window extends JFrame implements ActionListener {
                 add(fields[i][j]);
             }
         }
-        solveBtn = new JButton("Solve");
-        solveBtn.setSize(90,40);
-        solveBtn.setLocation(220,190);
-        solveBtn.addActionListener(this);
-        add(solveBtn);
+        
+        sendBtn = new JButton("Send");
+        sendBtn.setSize(90,40);
+        sendBtn.setLocation((getWidth()/5)-45,190);
+        sendBtn.addActionListener(this);
+        add(sendBtn);
         
         resetBtn = new JButton("Reset");
         resetBtn.setSize(90,40);
-        resetBtn.setLocation(120,190);
+        resetBtn.setLocation((getWidth()/5 * 2)-45,190);
         resetBtn.addActionListener(this);
         add(resetBtn);
+		
+        solveBtn = new JButton("Solve");
+        solveBtn.setSize(90,40);
+        solveBtn.setLocation((getWidth()/5 * 3)-45,190);
+        solveBtn.addActionListener(this);
+        add(solveBtn);
+        
+        stepBtn = new JButton("Step");
+        stepBtn.setSize(90,40);
+        stepBtn.setLocation((getWidth()/5 * 4)-45,190);
+        stepBtn.addActionListener(this);
+        add(stepBtn);
+		
+		solveBtn.setEnabled(false);
+		stepBtn.setEnabled(false);
+		
+		for (int i = 0; i < 5; i++){
+			for (int j = 0; j < 5; j++) {
+				int value = TEST_VALUES[j][i];
+				if (value != 0)
+					fields[i][j].setText(value+"");
+			}
+		}
+				
     }
 
     private void reset() {
@@ -81,9 +116,28 @@ public class Window extends JFrame implements ActionListener {
                 if (!(i == j && i == 4))
                     fields[i][j].setText("");
         
+			solveBtn.setEnabled(false);
+			stepBtn.setEnabled(false);
+			sendBtn.setEnabled(true);
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					fields[i][j].setEditable(true);
+				}
+			}
     }
     
-    private void startSolve() {
+    public void receiveValues(int[][] inValues) {
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+				if (inValues[i][j] != 0) {
+					fields[i][j].setText(""+inValues[i][j]);
+				} else {
+					fields[i][j].setText("");
+				}
+        
+    }
+	
+	public void sendValues() {
         try {
             int[][] values = new int[5][5];
             boolean throwException = false;
@@ -99,6 +153,7 @@ public class Window extends JFrame implements ActionListener {
                             values[i][j] = Integer.parseInt(text);
                         } catch (Exception e1) {
                             throwException = true;
+							System.out.println(i+","+j);
                             fields[i][j].setText("");
                         }
                     }
@@ -106,24 +161,33 @@ public class Window extends JFrame implements ActionListener {
             if (throwException)
                 throw new Exception("E");
             
-            Main.startSolve(values);
-        } catch (Exception e2) { }
-    }
-    
-    public void receiveValues(int[][] inValues) {
-        for (int i = 0; i < 5; i++)
-            for (int j = 0; j < 5; j++)
-                fields[i][j].setText(""+inValues[i][j]);
-        
-    }
+			solveBtn.setEnabled(true);
+			stepBtn.setEnabled(true);
+			sendBtn.setEnabled(false);
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					fields[i][j].setEditable(false);
+				}
+			}
+            Main.receiveValues(values);
+        } catch (Exception e2) {
+			e2.printStackTrace();
+		}
+	}
     
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == resetBtn) {
             reset();
         } else if (e.getSource() == solveBtn) {
-            startSolve();
-        }
+			solveBtn.setEnabled(false);
+			stepBtn.setEnabled(false);
+            Main.startSolve();
+        } else if (e.getSource() == stepBtn) {
+			Main.doStep();
+        } else if (e.getSource() == sendBtn) {
+			sendValues();
+		}
     }
     
 }

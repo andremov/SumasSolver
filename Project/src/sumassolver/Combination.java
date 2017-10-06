@@ -12,29 +12,37 @@ package sumassolver;
 public class Combination {
     
     private int[] nums;
-    private int chosenNum;
 
     public Combination(int num1, int num2) {
         this.nums = new int[2];
         this.nums[0] = num1;
         this.nums[1] = num2;
-        this.chosenNum = 0;
     }
 
     public Combination(int[] nums) {
         this.nums = nums;
-        this.chosenNum = 0;
     }
-    
-    public int getChosenNum() {
-        return nums[chosenNum];
-    }
-    
-    public void nextChosen() {
-        chosenNum++;
-    }
-    
-    public boolean isValid() {
-        return (chosenNum < 2);
-    }
+	
+	public boolean intersects(Combination other) {
+		return (this.nums[0] == this.getNumber(0) || 
+				this.nums[1] == this.getNumber(0) || 
+				this.nums[0] == this.getNumber(1) || 
+				this.nums[1] == this.getNumber(1));
+	}
+	
+	public Combination invert() {
+		return new Combination(nums[1],nums[0]);
+	}
+	
+	public int getNumber(int index) {
+		return nums[index];
+	}
+	
+	public boolean contains(int n) {
+		return (this.nums[0] == n || this.nums[1] == n);
+	}
+	
+	public String toString() {
+		return ("("+nums[0]+", "+nums[1]+")");
+	}
 }
