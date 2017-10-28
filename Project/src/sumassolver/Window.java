@@ -24,12 +24,20 @@ public class Window extends JFrame implements ActionListener {
 	JButton sendBtn;
     JButton solveBtn;
 	
-	static int[][] TEST_VALUES = {
+	static int[][] TEST_VALUES_1 = {
 		{00,12,11,00,26},
 		{13,00,00,14,40},
 		{00,15,00,10,35},
 		{04,00,16,00,35},
 		{25,41,38,32,00},
+	};
+	
+	static int[][] TEST_VALUES_2 = {
+		{0, 0, 0, 0, 10},
+		{0, 0, 0, 0, 26},
+		{0, 0, 0, 0, 42},
+		{0, 0, 0, 0, 58},
+		{28, 32, 36, 40, 0}
 	};
 
     public Color createColor(javafx.scene.paint.Color inColor) {
@@ -102,7 +110,7 @@ public class Window extends JFrame implements ActionListener {
 		
 		for (int i = 0; i < 5; i++){
 			for (int j = 0; j < 5; j++) {
-				int value = TEST_VALUES[j][i];
+				int value = TEST_VALUES_2[j][i];
 				if (value != 0)
 					fields[i][j].setText(value+"");
 			}
@@ -137,57 +145,57 @@ public class Window extends JFrame implements ActionListener {
         
     }
 	
-	public void sendValues() {
-        try {
-            int[][] values = new int[5][5];
-            boolean throwException = false;
-            for (int i = 0; i < 5; i++)
-                for (int j = 0; j < 5; j++)
-                    if ((i == j && i == 4)) {
-                        values[i][j] = 0;
-                    } else {
-                        String text = fields[i][j].getText();
-                        if (text.isEmpty())
-                            text = "0";
-                        try {
-                            values[i][j] = Integer.parseInt(text);
-                        } catch (Exception e1) {
-                            throwException = true;
-							System.out.println(i+","+j);
-                            fields[i][j].setText("");
-                        }
-                    }
-
-            if (throwException)
-                throw new Exception("E");
-            
-			solveBtn.setEnabled(true);
-			stepBtn.setEnabled(true);
-			sendBtn.setEnabled(false);
-			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 5; j++) {
-					fields[i][j].setEditable(false);
-				}
-			}
-            Main.receiveValues(values);
-        } catch (Exception e2) {
-			e2.printStackTrace();
-		}
-	}
-    
+//	public void sendValues() {
+//        try {
+//            int[][] values = new int[5][5];
+//            boolean throwException = false;
+//            for (int i = 0; i < 5; i++)
+//                for (int j = 0; j < 5; j++)
+//                    if ((i == j && i == 4)) {
+//                        values[i][j] = 0;
+//                    } else {
+//                        String text = fields[i][j].getText();
+//                        if (text.isEmpty())
+//                            text = "0";
+//                        try {
+//                            values[i][j] = Integer.parseInt(text);
+//                        } catch (Exception e1) {
+//                            throwException = true;
+//							System.out.println(i+","+j);
+//                            fields[i][j].setText("");
+//                        }
+//                    }
+//
+//            if (throwException)
+//                throw new Exception("E");
+//            
+//			solveBtn.setEnabled(true);
+//			stepBtn.setEnabled(true);
+//			sendBtn.setEnabled(false);
+//			for (int i = 0; i < 5; i++) {
+//				for (int j = 0; j < 5; j++) {
+//					fields[i][j].setEditable(false);
+//				}
+//			}
+//            Main.receiveValues(values);
+//        } catch (Exception e2) {
+//			e2.printStackTrace();
+//		}
+//	}
+//    
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == resetBtn) {
-            reset();
-        } else if (e.getSource() == solveBtn) {
-			solveBtn.setEnabled(false);
-			stepBtn.setEnabled(false);
-            Main.startSolve();
-        } else if (e.getSource() == stepBtn) {
-			Main.doStep();
-        } else if (e.getSource() == sendBtn) {
-			sendValues();
-		}
+//        if (e.getSource() == resetBtn) {
+//            reset();
+//        } else if (e.getSource() == solveBtn) {
+//			solveBtn.setEnabled(false);
+//			stepBtn.setEnabled(false);
+//            Main.startSolve();
+//        } else if (e.getSource() == stepBtn) {
+//			Main.doStep();
+//        } else if (e.getSource() == sendBtn) {
+//			sendValues();
+//		}
     }
     
 }

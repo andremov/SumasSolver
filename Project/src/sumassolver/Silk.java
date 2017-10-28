@@ -11,30 +11,30 @@ package sumassolver;
  */
 public class Silk implements Runnable{
 
-	private Thread thread;
-	private boolean value;
-	
-	public Silk() {
-		this.thread = new Thread(this);
-		this.value = true;
-	}
-	
-	public void startThread() {
-		this.value = true;
-		this.thread.start();
-	} 
-	
-	public void stopThread() {
-		this.value = false;
-	}
-
+//	private Thread thread;
+//	private boolean value;
+//	
+//	public Silk() {
+//		this.thread = new Thread(this);
+//		this.value = true;
+//	}
+//	
+//	public void startThread() {
+//		this.value = true;
+//		this.thread.start();
+//	} 
+//	
+//	public void stopThread() {
+//		this.value = false;
+//	}
+//
 	@Override
 	public void run() {
-		while (true) {
-			Main.doStep();
-			try {
-				Thread.sleep(10);
-			} catch (Exception e) { }
-		}
+//		while (true) {
+//			Main.doStep();
+//			try {
+//				Thread.sleep(10);
+//			} catch (Exception e) { }
+//		}
 	}
 }

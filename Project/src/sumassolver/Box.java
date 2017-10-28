@@ -18,6 +18,7 @@ public class Box {
     boolean isAnswer;
     int number;
 	int currentCombo;
+	boolean[] possibilities;
     
     public Box() {
         this.combos = new ArrayList<>();
@@ -25,70 +26,87 @@ public class Box {
         this.isSolved = false;
         this.isAnswer = false;
 		this.currentCombo = 0;
+		possibilities = new boolean[16];
+		clearCombos();
     }
+	
     public Box(int number, boolean solved, boolean answer) {
         this.number = number;
         this.isSolved = solved;
         this.isAnswer = answer;
+		possibilities = new boolean[16];
+		clearCombos();
     }
     
-    public boolean hasNumber() {
-        return isSolved || !combos.isEmpty();
-    }
-    
-    public int getCurrentNumber() {
-        return isSolved? number : combos.isEmpty()? 0 : combos.get(0).getNumber(currentCombo);
-    }
-    
-	public void addCombos(ArrayList<Combination> inCombos) {
-		if (combos.isEmpty()) {
-			this.replaceCombos(inCombos);
-		} else {
-			ArrayList<Combination> newCombos = new ArrayList<>();
-			newCombos.addAll(combos);
-			newCombos.addAll(inCombos);
-
-			for (int i = 0; i < newCombos.size(); i++) {
-				boolean intersects = false;
-				for (int j = 0; j < newCombos.size(); j++) {
-					if (i != j) {
-						if (newCombos.get(i).intersects(newCombos.get(j))) {
-							intersects = true;
-						}
-					}
-				}
-				if (!intersects) {
-					newCombos.remove(i);
-					i--;
-				}
-			}
-
-			this.combos = newCombos;
+	public void addCombo(Combination c) {
+		for (int i = 0; i < 4; i++) {
+			possibilities[c.getNumber(i)-1] = true;
 		}
 	}
 	
 	public void clearCombos() {
-		this.combos.clear();
-	}
-    
-	public void replaceCombos(ArrayList<Combination> combos) {
-		this.combos = combos;
-	}
-	
-	public ArrayList<Combination> getCombos() {
-		return this.combos;
-	}
-	
-    public Combination advanceCombinations() {
-        currentCombo++;
-        if (currentCombo>1) {
-            Combination combo = combos.get(0);
-			combos.remove(0);
-			currentCombo = 0;
-			return combo;
+		for (int i = 0; i < 16; i++) {
+			possibilities[i] = false;
 		}
-        return null;
-    }
+	}
+	
+//    public boolean hasNumber() {
+//        return isSolved || !combos.isEmpty();
+//    }
+//    
+//    public int getCurrentNumber() {
+//        return isSolved? number : combos.isEmpty()? 0 : combos.get(0).getNumber(currentCombo);
+//    }
+//    
+//	public void addCombos(ArrayList<Combination> inCombos) {
+//		if (combos.isEmpty()) {
+//			this.replaceCombos(inCombos);
+//		} else {
+//			ArrayList<Combination> newCombos = new ArrayList<>();
+//			newCombos.addAll(combos);
+//			newCombos.addAll(inCombos);
+//
+//			for (int i = 0; i < newCombos.size(); i++) {
+//				boolean intersects = false;
+//				for (int j = 0; j < newCombos.size(); j++) {
+//					if (i != j) {
+//						if (newCombos.get(i).intersects(newCombos.get(j))) {
+//							intersects = true;
+//						}
+//					}
+//				}
+//				if (!intersects) {
+//					newCombos.remove(i);
+//					i--;
+//				}
+//			}
+//
+//			this.combos = newCombos;
+//		}
+//	}
+//	
+//	public void clearCombos() {
+//		this.combos.clear();
+//	}
+//    
+//	public void replaceCombos(ArrayList<Combination> combos) {
+//		this.combos = combos;
+//	}
+//	
+//	public ArrayList<Combination> getCombos() {
+//		return this.combos;
+//	}
+//	
+//    public Combination advanceCombinations() {
+//        currentCombo++;
+//        if (currentCombo>1) {
+//            Combination combo = combos.get(0);
+//			combos.remove(0);
+//			currentCombo = 0;
+//			return combo;
+//		}
+//        return null;
+//    }
     
     
 }
