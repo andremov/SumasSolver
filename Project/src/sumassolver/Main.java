@@ -22,31 +22,161 @@ public abstract class Main implements Runnable {
 	
     public static void init() {
 //		history = new ArrayList<>();
-//        window = new Window();
-//        boxes = new Box[5][5];
-//		occupied = new boolean[16];
+        boxes = new Box[5][5];
+		occupied = new boolean[16];
 //		for (int i = 0; i < occupied.length; i++) {
 //			occupied[i] = false;
 //		}
 //		web = new Silk();
 //		doSolveNext = 1;
+
+        window = new Window();
     }
-//	
-//	public static void receiveValues(int[][] startPosition) {
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 5; j++) {
-//                int current = startPosition[i][j];
-//                if (current == 0) {
-//                    boxes[i][j] = new Box();
-//                } else {
-//                    boxes[i][j] = new Box(current, true, (i == 4 || j == 4));
-//					if (!boxes[i][j].isAnswer) {
-//						occupied[current-1] = true;
-//					}
-//                }
-//            }
-//        }
-//	}
+	
+	public static void receiveValues(int[][] startPosition) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                int current = startPosition[i][j];
+                if (current == 0) {
+                    boxes[i][j] = new Box();
+                } else {
+                    boxes[i][j] = new Box(current, i == 4 || j == 4);
+					if (!boxes[i][j].isAnswer) {
+						occupied[current-1] = true;
+					}
+                }
+            }
+        }
+		
+	}
+	
+	public static void trySolve() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				int sumaX = boxes[i][4].number;
+				for (int k = 0; k < 4; k++) {
+					sumaX -= boxes[i][k].number;
+				}
+				int sumaY = boxes[4][j].number;
+				for (int k = 0; k < 4; k++) {
+					sumaY -= boxes[k][j].number;
+				}
+				boxes[i][j].setPossibleNumbers(possibleNumbers(sumaX));
+				boxes[i][j].setPossibleNumbers(possibleNumbers(sumaY));
+				if (boxes[i][j].isSolved) {
+					occupied[boxes[i][j].number-1] = true;
+				}
+			}
+		}
+	}
+	
+	public static ArrayList<Integer> possibleNumbers(int total) {
+		// GENERATE
+		ArrayList<int[]> list = gen(total,new int[4]);
+		
+		
+		// REMOVE DUPLICATES
+		for (int i = list.size()-1; i >= 0; i--) {
+			int[] combo = list.get(i);
+			boolean duplicate = false;
+			for (int j = 0; j < combo.length; j++) {
+				for (int k = j+1; k < combo.length; k++) {
+					if (combo[j] == combo[k]) {
+						duplicate = true;
+					}
+				}
+			}
+			if (duplicate) {
+				list.remove(i);
+			}
+		}
+		
+		
+		// APPLY CAP
+		int top = 16;
+		for (int i = list.size()-1; i >= 0; i--) {
+			int[] combo = list.get(i);
+			boolean overTop = false;
+			for (int j = 0; j < combo.length; j++) {
+				if (combo[j] > top) {
+					overTop = true;
+				}
+			}
+			if (overTop) {
+				list.remove(i);
+			}
+		}
+		
+		// APPLY OCCUPIED
+		for (int i = list.size()-1; i >= 0; i--) {
+			int[] combo = list.get(i);
+			boolean hasOccupied = false;
+			for (int j = 0; j < combo.length; j++) {
+				if (!occupied[combo[j]]) {
+					hasOccupied = true;
+				}
+			}
+			if (hasOccupied) {
+				list.remove(i);
+			}
+		}
+		
+		
+		// SUMMARY
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			int[] combo = list.get(i);
+			for (int j = 0; j < combo.length; j++) {
+				numbers.add(combo[j]);
+			}
+		}
+		for (int i = 0; i < numbers.size(); i++) {
+			for (int j = numbers.size()-1; j > i; j--) {
+				if (numbers.get(i) == numbers.get(j)) {
+					numbers.remove(j);
+				}
+			}
+		}
+		
+		return numbers;
+	}
+	
+	public static ArrayList<int[]> gen(int total, int[] digs) {
+		ArrayList<int[]> al = new ArrayList<>();
+		
+		int[] wrapDigs = new int[4];
+		for (int i = 0; i < 4; i++) {
+			wrapDigs[i] = digs[i];
+		}
+		
+		if (digs[2] != 0 && digs[3] == 0) {
+			wrapDigs[3] = total;
+			al.add(wrapDigs);
+		}
+		
+		if (digs[1] != 0 && digs[2] == 0) {
+			for (int i = 1; i < total; i++) {
+				wrapDigs[2] = i;
+				al.addAll(gen(total-i,wrapDigs));
+			}
+		}
+		
+		if (digs[0] != 0 && digs[1] == 0) {
+			for (int i = 1; i < total; i++) {
+				wrapDigs[1] = i;
+				al.addAll(gen(total-i,wrapDigs));
+			}
+		}
+		
+		if (digs[0] == 0) {
+			for (int i = 1; i < total; i++) {
+				wrapDigs[0] = i;
+				al.addAll(gen(total-i,wrapDigs));
+			}
+		}
+		
+		return al;
+	}
 //    
 //    public static void startSolve() {
 //		System.out.println("Starting...");

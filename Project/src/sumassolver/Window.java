@@ -115,7 +115,8 @@ public class Window extends JFrame implements ActionListener {
 					fields[i][j].setText(value+"");
 			}
 		}
-				
+			
+		sendValues();
     }
 
     private void reset() {
@@ -145,43 +146,43 @@ public class Window extends JFrame implements ActionListener {
         
     }
 	
-//	public void sendValues() {
-//        try {
-//            int[][] values = new int[5][5];
-//            boolean throwException = false;
-//            for (int i = 0; i < 5; i++)
-//                for (int j = 0; j < 5; j++)
-//                    if ((i == j && i == 4)) {
-//                        values[i][j] = 0;
-//                    } else {
-//                        String text = fields[i][j].getText();
-//                        if (text.isEmpty())
-//                            text = "0";
-//                        try {
-//                            values[i][j] = Integer.parseInt(text);
-//                        } catch (Exception e1) {
-//                            throwException = true;
-//							System.out.println(i+","+j);
-//                            fields[i][j].setText("");
-//                        }
-//                    }
-//
-//            if (throwException)
-//                throw new Exception("E");
-//            
-//			solveBtn.setEnabled(true);
-//			stepBtn.setEnabled(true);
-//			sendBtn.setEnabled(false);
-//			for (int i = 0; i < 5; i++) {
-//				for (int j = 0; j < 5; j++) {
-//					fields[i][j].setEditable(false);
-//				}
-//			}
-//            Main.receiveValues(values);
-//        } catch (Exception e2) {
-//			e2.printStackTrace();
-//		}
-//	}
+	public void sendValues() {
+        try {
+            int[][] values = new int[5][5];
+            boolean throwException = false;
+            for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 5; j++)
+                    if ((i == j && i == 4)) {
+                        values[i][j] = 0;
+                    } else {
+                        String text = fields[i][j].getText();
+                        if (text.isEmpty())
+                            text = "0";
+                        try {
+                            values[i][j] = Integer.parseInt(text);
+                        } catch (Exception e1) {
+                            throwException = true;
+							System.out.println(i+","+j);
+                            fields[i][j].setText("");
+                        }
+                    }
+
+            if (throwException)
+                throw new Exception("E");
+            
+			solveBtn.setEnabled(true);
+			stepBtn.setEnabled(true);
+			sendBtn.setEnabled(false);
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					fields[i][j].setEditable(false);
+				}
+			}
+            Main.receiveValues(values);
+        } catch (Exception e2) {
+			e2.printStackTrace();
+		}
+	}
 //    
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -32,22 +32,31 @@ public class Combination {
 	}
 	
 	private static int possibleNextNum(int sum, int[] nums) {
+		String s = "";
+		for (int i = 0; i < nums.length; i++) {
+			s += nums[i]+" ";
+		}
+		System.out.println(sum+": "+s);
 		int numberSolved = 0;
 		for (int i = 0; i < nums.length; i++) {
-			if (nums[i] == 0) {
+			if (nums[i] != 0) {
 				numberSolved++;
 			}
 		}
+		System.out.println("Current solved numbers: "+numberSolved);
 		for (int i = 0; i < numberSolved; i++) {
 			sum -= nums[i];
 		}
+		System.out.println("Remaining sum: "+sum);
 		int largest = 16;
 		while (largest > sum) {
 			largest--;
 		}
+		System.out.println("Process1: "+largest);
 		if (largest == sum && numberSolved < 3) {
 			largest--;
 		}
+		System.out.println("Process2: "+largest);
 		boolean validNum = false;
 		while (!validNum) {
 			validNum = true;
@@ -58,6 +67,7 @@ public class Combination {
 				}
 			}
 		}
+		System.out.println("Process3: "+largest);
 		return largest;
 	}
 	
@@ -81,6 +91,10 @@ public class Combination {
 	}
 	
 	public String toString() {
-		return ("("+nums[0]+", "+nums[1]+")");
+		String s = "";
+		for (int i = 0; i < nums.length; i++) {
+			s += nums[i]+ " ";
+		}
+		return s;
 	}
 }
