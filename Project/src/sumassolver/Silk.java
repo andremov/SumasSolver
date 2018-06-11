@@ -30,11 +30,11 @@ public class Silk implements Runnable{
 //
 	@Override
 	public void run() {
-//		while (true) {
-//			Main.doStep();
-//			try {
-//				Thread.sleep(10);
-//			} catch (Exception e) { }
-//		}
+		while (true) {
+			Main.doStep();
+			try {
+				Thread.sleep(10);
+			} catch (Exception e) { }
+		}
 	}
 }

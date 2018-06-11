@@ -110,7 +110,7 @@ public class Window extends JFrame implements ActionListener {
 		
 		for (int i = 0; i < 5; i++){
 			for (int j = 0; j < 5; j++) {
-				int value = TEST_VALUES_2[j][i];
+				int value = TEST_VALUES_1[j][i];
 				if (value != 0)
 					fields[i][j].setText(value+"");
 			}
